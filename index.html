@@ -112,16 +112,8 @@ select option{background:#14161c}
   <div class="card">
     <div class="grid">
       <div><label for="nombre">Apellido y nombre</label><input id="nombre" autocomplete="off" placeholder="Ej.: Pérez, Juan Carlos"></div>
-      <div><label for="jerarquia">Jerarquía</label>
-        <select id="jerarquia">
-          <option value="">Seleccione jerarquía...</option>
-          <optgroup label="Cadetes"><option>Cadete de 1.er año</option><option>Cadete de 2.º año</option><option>Cadete de 3.er año</option></optgroup>
-          <optgroup label="Personal Transitorio Policial"><option value="P.T.P">P.T.P (Personal Transitorio Policial)</option></optgroup>
-          <optgroup label="Suboficiales"><option>Agente</option><option>Cabo</option><option>Cabo Primero</option><option>Sargento</option><option>Sargento Primero</option><option>Sargento Ayudante</option><option>Suboficial Principal</option><option>Suboficial Mayor</option></optgroup>
-          <optgroup label="Oficiales"><option>Oficial Subayudante</option><option>Oficial Ayudante</option><option>Oficial Auxiliar</option><option>Oficial Principal</option><option>Subcomisario</option><option>Comisario</option><option>Comisario Principal</option><option>Comisario Inspector</option><option>Comisario Mayor</option><option>Comisario General</option></optgroup>
-        </select></div>
+      <div><label for="jerarquia">Jerarquía</label><input id="jerarquia" value="Cadete de 3.er año" readonly tabindex="-1" style="opacity:.75;cursor:default"></div>
       <div><label for="dni">Legajo</label><input id="dni" inputmode="numeric" autocomplete="off" placeholder="N.º de legajo"></div>
-      <div><label for="destino">Destino</label><input id="destino" autocomplete="off" placeholder="Ej.: Comisaría 5.ª"></div>
     </div>
     <button class="btn full" id="btnStart">Comenzar evaluación</button>
     <div class="err" id="initErr"></div>
@@ -195,7 +187,7 @@ function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.to
 function fs(){const d=document.documentElement;try{(d.requestFullscreen||d.webkitRequestFullscreen||function(){}).call(d)}catch(e){}}
 
 $('btnStart').onclick=()=>{
-  const f=['nombre','jerarquia','dni','destino'];
+  const f=['nombre','dni'];
   if(f.some(k=>!$(k).value.trim())){$('initErr').textContent='Completá todos los campos para comenzar.';return}
   prep(); fs(); running=true; show('screenExam'); renderQuestion(0);
 };
@@ -253,7 +245,7 @@ async function finishExam(){
     <p class="${r.ok?'ok':'no'}">Tu respuesta: ${esc(r.userAnswer)}</p>${r.ok?'':`<p class="ok">Correcta: ${esc(r.correctAnswer)}</p>`}<p class="ex">${esc(r.q.exp)}</p></div>`).join('');
   const payload={
     fecha:new Date().toLocaleString("es-AR",{timeZone:"America/Argentina/Tucuman"}),
-    nombre:$('nombre').value.trim(), jerarquia:$('jerarquia').value, dni:$('dni').value.trim(), destino:$('destino').value.trim(),
+    nombre:$('nombre').value.trim(), jerarquia:$('jerarquia').value, dni:$('dni').value.trim(), destino:'',
     aciertos:`${scorePoints}/${n}`, nota,
     tiempo: violationsCount>0?`Finalizado (${violationsCount} salidas sancionadas)`:"Finalizado (Sin infracciones)",
     detalle: results.map(r=>`${r.q.id}:${r.penalty?'X':r.ok?'1':'0'}`).join('|')

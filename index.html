@@ -50,6 +50,7 @@ select option{background:#14161c}
 .opt.sel{border-color:var(--cy);background:rgba(63,208,255,.12)}
 .opt .k{flex:0 0 30px;height:30px;border-radius:9px;display:grid;place-items:center;font:700 14px var(--mono);background:var(--s2);color:var(--mut)}
 .opt.sel .k{background:var(--cy);color:#04121a}
+.scene:empty{display:none}
 .qhint{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--cy);margin:-12px 0 16px}
 .opt.multi .k{border-radius:7px;border:2px solid var(--mut);background:transparent;flex-basis:24px;height:24px;margin-top:1px}
 .opt.multi.sel .k{background:var(--cy);border-color:var(--cy)}
@@ -133,7 +134,6 @@ select option{background:#14161c}
   <div class="bar"><div id="progress"></div></div>
   <div class="scene" id="sceneTag"></div>
   <div class="qtext" id="questionText"></div>
-  <div class="qhint" id="qhint"></div>
   <div class="opts" id="optionsContainer"></div>
   <div class="foot"><button class="btn" id="btnNext" disabled>Confirmar respuesta →</button></div>
   <div class="warnline">No salgas de esta pantalla: <b>si lo hacés, la pregunta se anula</b>.</div>
@@ -161,26 +161,26 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyOE7zEz6Wx9EGOp1ZxT
 // t: "uno" = una sola respuesta · "varias" = marcar todas las correctas · "vf" = verdadero/falso
 // c: índices correctos · pick: cantidad exacta a marcar (opcional)
 const questions=[
-{tag:"José Ingenieros · Definición",t:"uno",q:"Según el autor José Ingenieros, ¿cómo define la Criminología?",
- o:["Es una ciencia multidisciplinaria que se encarga de recolectar las evidencias del lugar del hecho para luego ser peritadas y posteriormente analizadas en laboratorio.",
+{id:"P1",tag:"",t:"uno",q:"Según el Autor José Ingenieros, ¿Cómo define la Criminología?",
+ o:["Es una ciencia multidisciplinaria que se encarga de recolectar las evidencias del lugar del hecho para luego ser peritadas y posterior analizadas en laboratorio.-",
     "Es una ciencia multidisciplinaria que estudia la conducta humana peligrosa, constituya delito o no, tanto de los casos en forma individual como de los fenómenos de masa.",
-    "Es una ciencia multidisciplinaria que estudia la conducta únicamente de aquellas personas que son víctimas; las conductas de los victimarios son estudiadas y encuadradas por el Ministerio Público Fiscal."],c:[1],
+    "Es una ciencia multidisciplinaria que estudia la conducta únicamente de aquellas personas que son víctimas y las conductas realizadas por los victimarios son estudiadas y encuadradas por el Ministerio Público Fiscal."],c:[1],
  e:"Para Ingenieros la Criminología estudia la conducta humana peligrosa, sea o no delito, tanto en el caso individual como en los fenómenos de masa. Recolectar y peritar evidencias es tarea de la Criminalística."},
-{tag:"José Ingenieros · División",t:"varias",pick:3,q:"¿Cómo dividió la Criminología José Ingenieros? Marcá las tres correctas.",
+{id:"P2",tag:"Tienen que indicar tres",t:"varias",pick:3,q:"¿Cómo dividió la Criminología José Ingenieros?",
  o:["Clínica Criminológica","Etiología Criminal","Terapéutica de la Víctima","Etipología Criminalista","Terapéutica del Delito"],c:[0,1,4],
- e:"Ingenieros la dividió en Etiología Criminal (causas del delito), Clínica Criminológica (estudio del delincuente) y Terapéutica del Delito (medidas sociales e individuales de prevención y tratamiento)."},
-{tag:"Policía Científica",t:"varias",q:"¿Qué divisiones componen la Dirección de Policía Científica? Marcá todas las correctas.",
- o:["Div. Criminalística","Div. Bomberos","Div. Laboratorio Toxicológico y Bioquímico","Div. Trata de Personas","Div. Medicina Legal","Div. Violencia de Género"],c:[0,2,4],
+ e:"Ingenieros la dividió en Etiología Criminal (causas del delito), Clínica Criminológica (estudio del delincuente) y Terapéutica del Delito (medidas de prevención y tratamiento)."},
+{id:"P3",tag:"INDIQUE LA/S RESPUESTAS CORRECTAS",t:"varias",q:"QUE DIVISIONES COMPONEN A LA DIRECCIÓN DE POLICIA CIENTÍFICA",
+ o:["DIV. CRIMINALÍSTICA","DIV. BOMBEROS","DIV. LABORATORIO TOXICOLÓGICO Y BIOQUIMICO","DIV. TRATA DE PERSONAS","DIV. MEDICINA LEGAL","DIV. VIOLENCIA DE GÉNERO"],c:[0,2,4],
  e:"Policía Científica agrupa las áreas periciales: Criminalística, Laboratorio Toxicológico y Bioquímico y Medicina Legal. Bomberos, Trata de Personas y Violencia de Género dependen de otras direcciones."},
-{tag:"Privados de libertad",t:"varias",q:"Indicá los derechos que posee una persona privada de su libertad. Marcá todos los correctos.",
- o:["Derecho a tener un celular","Derecho a tener un abogado","Derecho a realizar un motín","Derecho a estudiar","Derecho a profesar la fe y/o culto religioso","Derecho a trabajar"],c:[1,3,4,5],
+{id:"P4",tag:"",t:"varias",q:"INDIQUE LOS DERECHOS QUE POSEE UNA PERSONA PRIVADA DE SU IBERTAD",
+ o:["DERECHO A TENER UN CELULAR","DERECHO A TENER UN ABOGADO","DERECHO A REALIZAR UN MOTÍN","DERECHO A ESTUDIAR","DERECHO A PROFETIZAR LA FE Y/O CULTO RELIGIOSO","DERECHO A TRABAJAR"],c:[1,3,4,5],
  e:"La persona privada de su libertad conserva el derecho de defensa (abogado), a la educación, a profesar su culto y a trabajar (Ley 24.660). Tener un celular no es un derecho y el motín es una conducta prohibida."},
-{tag:"Situación · Siniestro vial",t:"vf",q:"Ustedes, como oficiales de policía, intervienen en un siniestro vial (accidente de tránsito). Una vez terminada la intervención, deben trasladar los vehículos a la comisaría en calidad de secuestro.",
- o:["Verdadero","Falso"],c:[0],
+{id:"P5",tag:"SITUACIÓN",t:"vf",q:"ustedes como oficiales de policía intervienen en un siniestro vial (accidente de tránsito) y una vez terminada dicha intervención, deben trasladar los vehículos a la comisaría, en calidad de secuestro.",
+ o:["VERDADERO","FALSO"],c:[0],
  e:"Los vehículos involucrados se secuestran y se trasladan a la dependencia, con acta, a disposición de la autoridad judicial para las pericias correspondientes."},
-{tag:"Situación · Hecho de sangre",t:"vf",q:"Intervienen en un hecho de sangre en el que aparentemente se usó un arma de fuego. En la inspección ocular observan un arma en el suelo, con el martillo rebatido, cargador colocado y en aparente condición de uso. Como medida de seguridad, deben sacar el cargador y hacer la comprobación para desactivarla y que el lugar quede seguro.",
- o:["Verdadero","Falso"],c:[1],
- e:"El arma no se manipula: se preserva el lugar, se custodia, se deja constancia de su posición y estado, y se da intervención a Criminalística (Balística), que es quien la levanta y asegura. Manipularla altera rastros y su estado, y puede invalidar la prueba."}
+{id:"P6",tag:"SITUACIÓN",t:"vf",q:"Intervienen en un hecho de sangre, donde aparentemente habrían utilizado como medio criminal un arma de fuego, al realizar la intervención e inspección ocular observa un aparente arma de fuego en el suelo, la misma se encuentra con el martillo rebatido, cargador colocado y en aparente condición de uso operativo, ustedes como medida de seguridad, deben sacar el cargador y realizar la comprobación para desactivar el arma de fuego y que el lugar quede seguro.",
+ o:["VERDADERO","FALSO"],c:[1],
+ e:"El arma no se manipula: se preserva el lugar, se custodia, se deja constancia de su posición y estado, y se da intervención a Criminalística (Balística), que es quien la levanta y asegura. Manipularla altera rastros y puede invalidar la prueba."}
 ];
 
 const L="ABCDEFGH", $=id=>document.getElementById(id);
@@ -189,7 +189,7 @@ let exam=[], cur=0, chosen=new Set(), scorePoints=0, violationsCount=0, results=
 function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 function prep(){ // orden de preguntas y de opciones aleatorio por cada evaluado (V/F mantiene su orden)
   exam=shuffle(questions).map((q,i)=>{const base=q.o.map((_,k)=>k),idx=q.t==='vf'?base:shuffle(base);
-    return{n:i+1,tag:q.tag,t:q.t,pick:q.pick,q:q.q,options:idx.map(k=>q.o[k]),correct:q.c.map(k=>idx.indexOf(k)),exp:q.e}});
+    return{n:i+1,id:q.id,tag:q.tag,t:q.t,pick:q.pick,q:q.q,options:idx.map(k=>q.o[k]),correct:q.c.map(k=>idx.indexOf(k)),exp:q.e}});
 }
 function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.id===id));window.scrollTo(0,0)}
 function fs(){const d=document.documentElement;try{(d.requestFullscreen||d.webkitRequestFullscreen||function(){}).call(d)}catch(e){}}
@@ -207,7 +207,6 @@ function renderQuestion(i){
   $('stepCounter').textContent=`Pregunta ${i+1} de ${exam.length}`;
   $('progress').style.width=(i/exam.length*100)+'%';
   $('sceneTag').textContent=q.tag; $('questionText').textContent=q.q;
-  $('qhint').textContent=q.pick?`Marcá exactamente ${q.pick} opciones`:HINT[q.t];
   const c=$('optionsContainer'); c.innerHTML=''; c.classList.toggle('vf',q.t==='vf');
   q.options.forEach((t,k)=>{const b=document.createElement('button');b.className='opt'+(multi?' multi':'');
     b.innerHTML=`<span class="k">${multi?'':L[k]}</span><span></span>`;b.lastChild.textContent=t;
@@ -257,7 +256,7 @@ async function finishExam(){
     nombre:$('nombre').value.trim(), jerarquia:$('jerarquia').value, dni:$('dni').value.trim(), destino:$('destino').value.trim(),
     aciertos:`${scorePoints}/${n}`, nota,
     tiempo: violationsCount>0?`Finalizado (${violationsCount} salidas sancionadas)`:"Finalizado (Sin infracciones)",
-    detalle: results.map(r=>`${r.q.tag}:${r.penalty?'X':r.ok?'1':'0'}`).join('|')
+    detalle: results.map(r=>`${r.q.id}:${r.penalty?'X':r.ok?'1':'0'}`).join('|')
   };
   if(!/^https:\/\/script\.google\.com\//.test(SCRIPT_URL)){$('sentState').textContent='Planilla sin configurar: el resultado no se envió.';return}
   try{await fetch(SCRIPT_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});$('sentState').textContent='✓ Resultado enviado a los instructores.'}

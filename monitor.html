@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Monitor docente · Examen final Criminología</title>
+<meta name="robots" content="noindex">
+<style>
+:root{--bg:#0b0c10;--s1:rgba(255,255,255,.045);--s2:rgba(255,255,255,.08);--line:rgba(255,255,255,.10);--ink:#eef1f6;--mut:#9aa3b2;--cy:#3fd0ff;--co:#ff6b6b;--em:#2fd69a;--am:#ffb547;--disp:"Archivo","Arial Black",system-ui,sans-serif;--body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;--mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace}
+*{box-sizing:border-box;margin:0}body{background:var(--bg);color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased}
+.wrap{max-width:1240px;margin:0 auto;padding:26px 20px 60px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--cy)}
+h1{font-family:var(--disp);font-size:clamp(26px,4vw,40px);letter-spacing:-.02em;margin:6px 0 4px}
+.sub{color:var(--mut);font-size:14px}
+header{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:22px}
+.live{font-family:var(--mono);font-size:12px;color:var(--em);display:flex;gap:8px;align-items:center}
+.live i{width:8px;height:8px;border-radius:50%;background:var(--em);animation:p 1.6s infinite}@keyframes p{50%{opacity:.3}}
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:18px}
+.k{background:var(--s1);border:1px solid var(--line);border-radius:16px;padding:16px}
+.k small{color:var(--mut);font-size:12px;text-transform:uppercase;letter-spacing:.08em}
+.k b{display:block;font-family:var(--disp);font-size:32px;margin-top:6px}
+.cols{display:grid;grid-template-columns:1.6fr 1fr;gap:16px}
+.panel{background:var(--s1);border:1px solid var(--line);border-radius:16px;padding:18px;overflow:hidden}
+.panel h3{font-size:14px;text-transform:uppercase;letter-spacing:.1em;color:var(--mut);margin-bottom:14px;font-weight:600}
+.filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+input,select{padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:rgba(0,0,0,.35);color:var(--ink);font:inherit;font-size:14px;outline:none}
+select option{background:#14161c}
+.btn{border:0;border-radius:10px;padding:10px 16px;font:600 14px var(--body);cursor:pointer;background:var(--cy);color:#04121a}
+.btn.ghost{background:var(--s2);color:var(--ink)}
+.tbl{overflow:auto;max-height:620px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{position:sticky;top:0;background:#14161c;text-align:left;font-weight:600;color:var(--mut);font-size:12px;text-transform:uppercase;letter-spacing:.06em;padding:10px;cursor:pointer;white-space:nowrap}
+td{padding:10px;border-top:1px solid var(--line);vertical-align:middle}
+.nota{font-family:var(--mono);font-weight:700;padding:3px 9px;border-radius:8px;display:inline-block}
+.n-ok{background:rgba(47,214,154,.15);color:var(--em)}.n-mid{background:rgba(255,181,71,.15);color:var(--am)}.n-bad{background:rgba(255,107,107,.15);color:var(--co)}
+.flag{color:var(--co);font-family:var(--mono);font-size:12px}.clean{color:var(--mut);font-size:12px}
+.q{margin-bottom:12px}.q .t{font-size:13px;line-height:1.35;margin-bottom:5px}.q .t span{font-family:var(--mono);color:var(--am);font-size:11px;display:block}
+.q .b{height:8px;background:var(--s2);border-radius:6px;overflow:hidden}.q .b div{height:100%}
+.q .v{font-family:var(--mono);font-size:11px;color:var(--mut);margin-top:3px}
+.dist{display:flex;align-items:flex-end;gap:6px;height:120px;margin-bottom:6px}
+.dist div{flex:1;background:var(--cy);border-radius:6px 6px 0 0;min-height:2px;position:relative}
+.dist div span{position:absolute;top:-18px;left:0;right:0;text-align:center;font:11px var(--mono);color:var(--mut)}
+.dl{display:flex;gap:6px}.dl span{flex:1;text-align:center;font:11px var(--mono);color:var(--mut)}
+#gate{min-height:100vh;display:grid;place-items:center;padding:20px}
+.gbox{width:100%;max-width:380px;background:var(--s1);border:1px solid var(--line);border-radius:20px;padding:28px;text-align:center}
+.gbox img{width:72px;margin-bottom:12px}.gbox input{width:100%;margin:18px 0 10px;text-align:center;font-size:18px}.gbox .btn{width:100%;padding:14px}
+.err{color:var(--co);font-size:13px;min-height:18px;margin-top:8px;line-height:1.45}
+#qs{max-height:560px;overflow:auto;padding-right:6px}
+.empty{color:var(--mut);padding:30px;text-align:center}
+@media(max-width:900px){.kpis{grid-template-columns:repeat(2,1fr)}.cols{grid-template-columns:1fr}}
+</style></head><body>
+<div id="gate"><div class="gbox"><img src="assets/escudo-policia.png" alt=""><div class="eyebrow">Acceso docentes</div>
+<h1 style="font-size:24px">Monitor de resultados</h1><input id="key" type="password" placeholder="Clave de docentes" autocomplete="off">
+<button class="btn" id="go">Ingresar</button><div class="err" id="gerr"></div></div></div>
+
+<div class="wrap" id="app" hidden>
+<header><div><div class="eyebrow">IESP · Criminología</div><h1>Monitor de la evaluación</h1>
+<div class="sub" id="upd">—</div></div>
+<div style="display:flex;gap:10px;align-items:center"><span class="live"><i></i>ACTUALIZA CADA 20 s</span><button class="btn ghost" id="pdf">Informe PDF</button><button class="btn" id="ref">Actualizar</button></div></header>
+
+<div class="kpis">
+<div class="k"><small>Evaluados</small><b id="kN">0</b></div>
+<div class="k"><small>Promedio</small><b id="kAvg">–</b></div>
+<div class="k"><small>Aprobados (≥ 7)</small><b id="kOk">–</b></div>
+<div class="k"><small>Con salidas</small><b id="kV" style="color:var(--co)">–</b></div>
+<div class="k"><small>Nota más baja</small><b id="kMin">–</b></div>
+</div>
+
+<div class="cols">
+<div class="panel"><h3>Evaluados</h3>
+<div class="filters"><input id="fq" placeholder="Buscar nombre o legajo"><select id="fj"><option value="">Todas las jerarquías</option></select><select id="fd"><option value="">Todos los destinos</option></select><select id="fe"><option value="">Todos</option><option value="ok">Aprobados</option><option value="bad">Desaprobados</option><option value="v">Con salidas</option></select></div>
+<div class="tbl"><table><thead><tr><th data-k="fecha">Hora</th><th data-k="nombre">Nombre</th><th data-k="jerarquia">Jerarquía</th><th data-k="dni">Legajo</th><th data-k="destino">Destino</th><th data-k="aciertos">Aciertos</th><th data-k="nota">Nota</th><th data-k="tiempo">Salidas</th></tr></thead><tbody id="tb"></tbody></table></div></div>
+<div>
+<div class="panel" style="margin-bottom:16px"><h3>Distribución de notas</h3><div class="dist" id="dist"></div><div class="dl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span></div></div>
+<div class="panel"><h3>Preguntas más falladas</h3><div id="qs"><div class="empty">Sin datos por pregunta todavía.</div></div></div>
+</div></div></div>
+
+<script>
+const SCRIPT_URL="https://script.google.com/macros/s/AKfycbyOE7zEz6Wx9EGOp1ZxTuqZ8vwqKce55-VrnHIizo3xcvmRpsvjMgDf9T5ZGErYaJyhOg/exec";
+const QMAP={"José Ingenieros · Definición": "Según el autor José Ingenieros, ¿cómo define la Criminología?", "José Ingenieros · División": "¿Cómo dividió la Criminología José Ingenieros? Marcá las tres correctas.", "Policía Científica": "¿Qué divisiones componen la Dirección de Policía Científica? Marcá todas las correctas.", "Privados de libertad": "Indicá los derechos que posee una persona privada de su libertad. Marcá todos los correctos.", "Situación · Siniestro vial": "Ustedes, como oficiales de policía, intervienen en un siniestro vial (accidente de tránsito). Una vez terminada la intervención, deben trasladar los vehículos a la comisaría en calidad de secuestro.", "Situación · Hecho de sangre": "Intervienen en un hecho de sangre en el que aparentemente se usó un arma de fuego. En la inspección ocular observan un arma en el suelo, con el martillo rebatido, cargador colocado y en aparente condición de uso. Como medida de seguridad, deben sacar el cargador y hacer la comprobación para desactivarla y que el lugar quede seguro."};
+const $=id=>document.getElementById(id);let KEY='',rows=[],sortK='fecha',sortD=-1,timer;
+const num=s=>parseFloat(String(s).replace(',','.'))||0;
+const salidas=t=>{const m=String(t).match(/\((\d+)/);return m?+m[1]:0};
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function jsonp(){return new Promise((ok,ko)=>{const cb='cb'+Date.now()+Math.floor(Math.random()*1e4),sc=document.createElement('script');
+  const end=()=>{delete window[cb];sc.remove();clearTimeout(tm)};const tm=setTimeout(()=>{end();ko(new Error('timeout'))},15000);
+  window[cb]=d=>{end();ok(d)};sc.onerror=()=>{end();ko(new Error('jsonp'))};
+  sc.src=`${SCRIPT_URL}?action=list&key=${encodeURIComponent(KEY)}&callback=${cb}&t=${Date.now()}`;document.head.appendChild(sc)})}
+async function load(){
+  let d;
+  try{d=await jsonp()}catch(e){
+    let t;try{const r=await fetch(`${SCRIPT_URL}?action=list&key=${encodeURIComponent(KEY)}&t=${Date.now()}`);t=await r.text()}catch(x){throw new Error('SINRESP')}
+    try{d=JSON.parse(t)}catch(x){throw new Error(/doGet/i.test(t)?'DOGET':'SINRESP')}
+  }
+  if(!d.ok)throw new Error(d.error||'Error');rows=d.rows.filter(x=>x.nombre);render();
+  $('upd').textContent='Última actualización: '+new Date().toLocaleTimeString('es-AR');
+}
+$('go').onclick=async()=>{KEY=$('key').value.trim();$('gerr').textContent='Verificando…';
+  try{await load();try{sessionStorage.setItem('mon_k',KEY)}catch(e){}$('gate').remove();$('app').hidden=false;timer=setInterval(()=>load().catch(()=>{}),20000)}
+  catch(e){const M={'Clave incorrecta':'Clave incorrecta. Debe ser igual a CLAVE_DOCENTES del script (respetando mayúsculas).',
+    DOGET:'El script no tiene publicada la versión nueva. Apps Script → Implementar → Gestionar implementaciones → lápiz → Nueva versión → Implementar.',
+    SINRESP:'El script no devuelve resultados. Publicá el código nuevo: Implementar → Gestionar implementaciones → EXAMENREGIMEN → lápiz → Versión: Nueva versión → Implementar.',
+    OTRO:'El script respondió algo inesperado. Publicá una nueva versión del script y volvé a intentar.'};
+    $('gerr').textContent=M[e.message]||('Error: '+e.message)}};
+$('key').onkeydown=e=>{if(e.key==='Enter')$('go').click()};
+try{const k=sessionStorage.getItem('mon_k');if(k){$('key').value=k;$('go').click()}}catch(e){}
+$('ref').onclick=()=>load().catch(()=>{});
+['fq','fj','fd','fe'].forEach(i=>$(i).oninput=render);
+document.querySelectorAll('th').forEach(th=>th.onclick=()=>{const k=th.dataset.k;sortD=sortK===k?-sortD:1;sortK=k;render()});
+function opts(sel,vals){const cur=sel.value,first=sel.options[0].outerHTML;sel.innerHTML=first+[...new Set(vals)].filter(Boolean).sort().map(v=>`<option>${esc(v)}</option>`).join('');sel.value=cur}
+function filtered(){const q=$('fq').value.toLowerCase(),j=$('fj').value,d=$('fd').value,e=$('fe').value;
+  return rows.filter(r=>(!q||(r.nombre+' '+r.dni).toLowerCase().includes(q))&&(!j||r.jerarquia===j)&&(!d||r.destino===d)&&(!e||(e==='ok'?num(r.nota)>=7:e==='bad'?num(r.nota)<7:salidas(r.tiempo)>0)))}
+function render(){
+  opts($('fj'),rows.map(r=>r.jerarquia));opts($('fd'),rows.map(r=>r.destino));
+  const f=filtered(),n=f.length,notas=f.map(r=>num(r.nota));
+  $('kN').textContent=n;$('kAvg').textContent=n?(notas.reduce((a,b)=>a+b,0)/n).toFixed(2).replace('.',','):'–';
+  $('kOk').textContent=n?Math.round(notas.filter(x=>x>=7).length/n*100)+'%':'–';
+  $('kV').textContent=n?f.filter(r=>salidas(r.tiempo)>0).length:'–';$('kMin').textContent=n?Math.min(...notas).toFixed(2).replace('.',','):'–';
+  const s=f.slice().sort((a,b)=>{const x=sortK==='nota'?num(a.nota)-num(b.nota):sortK==='tiempo'?salidas(a.tiempo)-salidas(b.tiempo):String(a[sortK]).localeCompare(String(b[sortK]),'es',{numeric:true});return x*sortD});
+  $('tb').innerHTML=s.length?s.map(r=>{const v=num(r.nota),c=v>=7?'n-ok':v>=5?'n-mid':'n-bad',sl=salidas(r.tiempo);
+    return `<tr><td style="font-family:var(--mono);font-size:12px;color:var(--mut)">${esc(r.fecha)}</td><td>${esc(r.nombre)}</td><td>${esc(r.jerarquia)}</td><td>${esc(r.dni)}</td><td>${esc(r.destino)}</td><td style="font-family:var(--mono)">${esc(r.aciertos)}</td><td><span class="nota ${c}">${esc(r.nota)}</span></td><td>${sl?`<span class="flag">⚠ ${sl}</span>`:'<span class="clean">—</span>'}</td></tr>`}).join(''):'<tr><td colspan="8" class="empty">Todavía no hay resultados.</td></tr>';
+  const b=Array(10).fill(0);notas.forEach(x=>b[Math.min(9,Math.max(0,Math.floor(x)-1))]++);const mx=Math.max(1,...b);
+  $('dist').innerHTML=b.map((c,i)=>`<div style="height:${c/mx*100}%;background:${i>=6?'var(--em)':i>=4?'var(--am)':'var(--co)'}"><span>${c||''}</span></div>`).join('');
+  const st={};f.forEach(r=>String(r.detalle||'').split('|').forEach(p=>{const i=p.lastIndexOf(':');if(i<0)return;const t=p.slice(0,i),v=p.slice(i+1);st[t]=st[t]||{ok:0,n:0};st[t].n++;if(v==='1')st[t].ok++}));
+  const l=Object.entries(st).map(([t,o])=>({t,fail:1-o.ok/o.n,n:o.n})).sort((a,b)=>b.fail-a.fail);
+  $('qs').innerHTML=l.length?l.map(x=>{const p=Math.round(x.fail*100),c=p>=50?'var(--co)':p>=30?'var(--am)':'var(--em)';
+    return `<div class="q"><div class="t"><span>${esc(x.t)}</span>${esc((QMAP[x.t]||'').slice(0,110))}…</div><div class="b"><div style="width:${p}%;background:${c}"></div></div><div class="v">${p}% falló · ${x.n} respuestas</div></div>`}).join(''):'<div class="empty">Sin datos por pregunta todavía.</div>';
+}
+$('pdf').onclick=()=>{
+  const f=filtered(),n=f.length;if(!n){alert('No hay resultados para el informe.');return}
+  const notas=f.map(r=>num(r.nota)),avg=notas.reduce((a,b)=>a+b,0)/n,ap=notas.filter(x=>x>=7).length,vs=f.filter(r=>salidas(r.tiempo)>0).length;
+  const fx=v=>v.toFixed(2).replace('.',',');
+  const filt=[$('fj').value&&('Jerarquía: '+$('fj').value),$('fd').value&&('Destino: '+$('fd').value),$('fe').value&&('Estado: '+$('fe').selectedOptions[0].text),$('fq').value&&('Búsqueda: '+$('fq').value)].filter(Boolean).join(' · ')||'Todos los evaluados';
+  const b=Array(10).fill(0);notas.forEach(x=>b[Math.min(9,Math.max(0,Math.floor(x)-1))]++);const mx=Math.max(1,...b);
+  const st={};f.forEach(r=>String(r.detalle||'').split('|').forEach(p=>{const i=p.lastIndexOf(':');if(i<0)return;const t=p.slice(0,i),v=p.slice(i+1);st[t]=st[t]||{ok:0,n:0};st[t].n++;if(v==='1')st[t].ok++}));
+  const qs=Object.entries(st).map(([t,o])=>({t,p:Math.round((1-o.ok/o.n)*100),n:o.n})).sort((a,b)=>b.p-a.p);
+  const rows=f.slice().sort((a,b)=>String(a.nombre).localeCompare(String(b.nombre),'es'));
+  const now=new Date().toLocaleString('es-AR',{timeZone:'America/Argentina/Tucuman',dateStyle:'long',timeStyle:'short'});
+  const logo=new URL('assets/escudo-policia.png',location.href).href;
+  const col=v=>v>=7?'#0c8a5f':v>=5?'#b9770e':'#c43a3a';
+  const html=`<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Informe de resultados · Examen final Criminología</title>
+<style>@page{size:A4;margin:14mm 13mm}*{box-sizing:border-box;margin:0}body{font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;color:#141a24;font-size:10pt;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.hd{display:flex;gap:14px;align-items:center;border-bottom:2px solid #0b1b2b;padding-bottom:10px}.hd img{width:54px}.hd small{font:700 8pt ui-monospace,Menlo,monospace;letter-spacing:.14em;color:#0a74a8;text-transform:uppercase}
+h1{font-size:19pt;letter-spacing:-.02em;color:#0b1b2b;margin:2px 0}.meta{font-size:8.5pt;color:#5b6474}
+h2{font-size:11.5pt;color:#0b1b2b;margin:16px 0 7px;text-transform:uppercase;letter-spacing:.06em}
+.k{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-top:12px}.k div{background:#f3f6fa;border-radius:8px;padding:9px 10px}.k small{font-size:7.5pt;color:#5b6474;text-transform:uppercase;letter-spacing:.06em}.k b{display:block;font-size:15pt;color:#0b1b2b;white-space:nowrap}
+.two{display:grid;grid-template-columns:1fr 1.25fr;gap:14px}
+.dist{display:flex;align-items:flex-end;gap:5px;height:90px;border-bottom:1px solid #dfe4ec}.dist div{flex:1;border-radius:4px 4px 0 0;position:relative;min-height:1px}.dist span{position:absolute;top:-14px;left:0;right:0;text-align:center;font-size:7.5pt;color:#5b6474}
+.dl{display:flex;gap:5px}.dl span{flex:1;text-align:center;font-size:7.5pt;color:#5b6474;padding-top:3px}
+.q{display:grid;grid-template-columns:1fr 46px;gap:6px;align-items:center;margin-bottom:5px;font-size:8.5pt}.q .b{height:6px;background:#eef1f5;border-radius:4px;overflow:hidden;margin-top:2px}.q .b i{display:block;height:100%}.q em{font-style:normal;font-weight:700;text-align:right}
+table{width:100%;border-collapse:collapse;font-size:8.6pt}th{text-align:left;font-size:7.3pt;text-transform:uppercase;letter-spacing:.06em;color:#5b6474;border-bottom:1.5px solid #0b1b2b;padding:5px 5px}td{padding:5px 5px;border-bottom:1px solid #e6eaf0}tr{break-inside:avoid}
+.n{font-weight:800}.sal{color:#c43a3a;font-weight:700}
+.sig{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:46px;break-inside:avoid}.sig div{border-top:1px solid #141a24;padding-top:5px;text-align:center;font-size:8.5pt}.sig b{display:block;font-size:9.5pt}
+.ft{margin-top:14px;font-size:7.5pt;color:#98a1b0;text-align:center}
+.tip{position:fixed;top:0;left:0;right:0;background:#0b1b2b;color:#fff;padding:10px;text-align:center;font-size:10pt}@media print{.tip{display:none}}</style></head><body>
+<div class="tip">Para guardar: en el cuadro de impresión elegí <b>“Guardar como PDF”</b>.</div>
+<div class="hd"><img src="${logo}" alt=""><div><small>Policía de Tucumán · IESP</small><h1>Informe de resultados · Examen final Criminología</h1><div class="meta">Final 2026 — Emitido el ${esc(now)} — ${esc(filt)}</div></div></div>
+<div class="k"><div><small>Evaluados</small><b>${n}</b></div><div><small>Promedio</small><b>${fx(avg)}</b></div><div><small>Aprobados (≥7)</small><b>${ap} · ${Math.round(ap/n*100)}%</b></div><div><small>Con salidas</small><b style="color:#c43a3a">${vs}</b></div><div><small>Nota mín. / máx.</small><b>${fx(Math.min(...notas))} / ${fx(Math.max(...notas))}</b></div></div>
+<div class="two"><div><h2>Distribución de notas</h2><div class="dist" style="margin-top:18px">${b.map((c,i)=>`<div style="height:${c/mx*100}%;background:${i>=6?'#0c8a5f':i>=4?'#e0a23a':'#c43a3a'}"><span>${c||''}</span></div>`).join('')}</div><div class="dl">${b.map((_,i)=>`<span>${i+1}</span>`).join('')}</div></div>
+<div><h2>Preguntas más falladas</h2>${qs.length?qs.slice(0,8).map(x=>`<div class="q"><div>${esc(x.t)} — ${esc((QMAP[x.t]||'').slice(0,70))}…<div class="b"><i style="width:${x.p}%;background:${x.p>=50?'#c43a3a':x.p>=30?'#e0a23a':'#0c8a5f'}"></i></div></div><em>${x.p}%</em></div>`).join(''):'<p class="meta">Sin detalle por pregunta.</p>'}</div></div>
+<h2>Detalle por evaluado</h2><table><thead><tr><th>#</th><th>Apellido y nombre</th><th>Jerarquía</th><th>Legajo</th><th>Destino</th><th>Aciertos</th><th>Nota</th><th>Salidas</th><th>Resultado</th></tr></thead><tbody>
+${rows.map((r,i)=>{const v=num(r.nota),sl=salidas(r.tiempo);return `<tr><td>${i+1}</td><td>${esc(r.nombre)}</td><td>${esc(r.jerarquia)}</td><td>${esc(r.dni)}</td><td>${esc(r.destino)}</td><td>${esc(r.aciertos)}</td><td class="n" style="color:${col(v)}">${esc(r.nota)}</td><td>${sl?`<span class="sal">${sl}</span>`:'—'}</td><td style="color:${col(v)};font-weight:700">${v>=7?'Aprobado':'Desaprobado'}</td></tr>`}).join('')}
+</tbody></table>
+
+<div class="ft">Criminología · Examen final 2026 · Policía de Tucumán · IESP</div>
+<script>window.onload=()=>setTimeout(()=>window.print(),400)<\/script></body></html>`;
+  const w=window.open('','_blank');
+  if(!w){alert('Permití las ventanas emergentes para generar el informe.');return}
+  w.document.open();w.document.write(html);w.document.close();
+};
+</script></body></html>
